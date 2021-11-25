@@ -1,0 +1,20 @@
+{
+  "name": "map-gl-geolocation",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@turf/bearing": "^6.5.0",
+    "@turf/destination": "^6.5.0",
+    "@turf/distance": "^6.5.0",
+    "@types/mapbox-gl": "^2.4.2",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.4"
+  },
+  "dependencies": {
+    "mapbox-gl": "^1.13.2"
+  }
+}

@@ -1,0 +1,44 @@
+#mapgl-geolocation-marker {
+    width: 14px;
+    height: 14px;
+    top: -7px;
+    left: -7px;
+    position: absolute;
+    border-radius: 50%;
+    background: #008DF1;
+    border:1px solid #000000AA;    
+}
+
+#mapgl-geolocation-marker.inaccurate {
+    background: #AAAAAA;
+}
+
+#mapgl-geolocation-marker-compass {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    z-index: 10000001;
+    position: absolute;
+    top: -14px;
+    left: -14px;
+    border: 7px solid;
+    border-color: transparent;
+    border-top-color: #008DF1;
+    opacity: 0.5;
+    box-sizing: content-box;
+}
+
+#mapgl-geolocation-marker-accuracy {
+    position: absolute;
+    border-radius: 50%;
+    background: #008DF134;
+    border:1px solid #00000034;    
+}
+
+#mapgl-geolocation-marker-accuracy.inaccurate {
+    background: #AAAAAA34;
+}
+
+.mapboxgl-ctrl button.mapboxgl-ctrl-geolocate-remove .mapboxgl-ctrl-icon {
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='29' height='29' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='%23aaa'%3E%3Cpath d='M10 4C9 4 9 5 9 5v.1A5 5 0 005.1 9H5s-1 0-1 1 1 1 1 1h.1A5 5 0 009 14.9v.1s0 1 1 1 1-1 1-1v-.1a5 5 0 003.9-3.9h.1s1 0 1-1-1-1-1-1h-.1A5 5 0 0011 5.1V5s0-1-1-1zm0 2.5a3.5 3.5 0 110 7 3.5 3.5 0 110-7z'/%3E%3Ccircle cx='10' cy='10' r='2'/%3E%3Cpath d='M14 5l1 1-9 9-1-1 9-9z' fill='red'/%3E%3C/svg%3E")
+}
