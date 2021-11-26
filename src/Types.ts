@@ -1,4 +1,5 @@
 import type { Evented, Map as MapboxMap } from 'mapbox-gl';
+import { EnhancedMapboxMap as IndoorMapboxMap } from 'map-gl-indoor';
 
 import GeolocationLayer from './GeolocationLayer';
 
@@ -19,9 +20,8 @@ export type Position = LngLat & {
 // in degrees
 export type Heading = number;
 
-export type EnhancedMapboxMap = MapboxMap & {
-    indoor?: any, // TODO
-    geolocation?: GeolocationLayer
+export type EnhancedMapboxMap = (MapboxMap | IndoorMapboxMap) & {
+    geolocation: GeolocationLayer
 };
 
 export type GeolocationLayerOptions = {

@@ -23,7 +23,6 @@ const DefaultOptions: GeolocationLayerOptions = {
 
 class GeolocationLayer {
 
-
     /**
      * Map
      */

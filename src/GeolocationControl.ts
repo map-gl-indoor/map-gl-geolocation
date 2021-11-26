@@ -1,7 +1,7 @@
 import GeolocationLayer from './GeolocationLayer';
 
 import type { EnhancedMapboxMap, GeolocationProvider } from './Types';
-import type { IControl } from 'mapbox-gl';
+import type { IControl, Map as MapboxMap } from 'mapbox-gl';
 
 enum State {
     IDLE = 0,
@@ -32,13 +32,14 @@ class GeolocationControl implements IControl {
         this.geolocationProvider = geolocationProvider;
     }
 
-    onAdd(map: EnhancedMapboxMap): HTMLElement {
+    onAdd(map: MapboxMap | EnhancedMapboxMap): HTMLElement {
 
-        if (!map.geolocation) {
+        if ((map as EnhancedMapboxMap).geolocation !== undefined) {
             throw Error('call addGeolocationTo(map) before creating the control');
         }
-        this.map = map;
-        this.geolocationLayer = map.geolocation;
+
+        this.map = map as EnhancedMapboxMap;
+        this.geolocationLayer = this.map.geolocation;
 
         map.on('geolocation.position.changed', this.onPositionChanged);
         this.onPositionChanged();
@@ -50,7 +51,7 @@ class GeolocationControl implements IControl {
         this.geolocationProvider?.on('heading.changed', this.onProviderHeadingChanged);
 
         const domElements = this.domElements = this.createDOMButtons();
-        this.handleButtonsLogic(domElements, map.geolocation);
+        this.handleButtonsLogic(domElements, this.map.geolocation);
 
         return domElements.container;
     }
