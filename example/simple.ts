@@ -1,5 +1,5 @@
 import { Map as MapboxMap } from 'mapbox-gl';
-import { addGeolocationTo, GeolocationControl } from '../src/index';
+import { addGeolocationTo, GeolocationControl, MapboxMapWithGeoloc } from '../src/index';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
@@ -14,16 +14,15 @@ const map = new MapboxMap({
     center: [3.883528, 43.608749],
     style: 'mapbox://styles/mapbox/streets-v10',
     accessToken,
-});
+}) as MapboxMapWithGeoloc;
 
-const enhancedMap = addGeolocationTo(map);
+addGeolocationTo(map);
 
-enhancedMap.geolocation.position = ({
+map.geolocation.position = ({
     lat: 43.608749,
     lng: 3.883528,
     accuracy: 10
 });
-enhancedMap.geolocation.heading = 280;
-
+map.geolocation.heading = 280;
 
 map.addControl(new GeolocationControl());
