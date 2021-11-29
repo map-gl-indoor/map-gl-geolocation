@@ -1,10 +1,35 @@
 {
   "name": "map-gl-geolocation",
+  "description": "A MapGL plugin to visualize a custom user geolocation",
   "version": "0.1.0",
+  "author": "Thibaud Michel",
+  "license": "MIT",
+  "main": "dist/map-gl-geolocation.umd.js",
+  "module": "dist/map-gl-geolocation.es.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/map-gl-indoor/map-gl-geolocation.git"
+  },
+  "keywords": [
+    "mapbox",
+    "mapboxgl",
+    "maplibre",
+    "plugin",
+    "geolocation",
+    "indoor"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview"
+  },
+  "peerDependencies": {
+    "mapbox-gl": ">1.10.0"
   },
   "devDependencies": {
     "@turf/bearing": "^6.5.0",
@@ -18,5 +43,11 @@
   "dependencies": {
     "map-gl-indoor": "^0.4.0",
     "mapbox-gl": "^1.13.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/map-gl-geolocation.es.js",
+      "require": "./dist/map-gl-geolocation.umd.js"
+    }
   }
 }
