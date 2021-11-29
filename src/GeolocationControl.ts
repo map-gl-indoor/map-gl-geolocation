@@ -34,7 +34,7 @@ class GeolocationControl implements IControl {
 
     onAdd(map: MapboxMap | EnhancedMapboxMap): HTMLElement {
 
-        if ((map as EnhancedMapboxMap).geolocation !== undefined) {
+        if ((map as EnhancedMapboxMap).geolocation === undefined) {
             throw Error('call addGeolocationTo(map) before creating the control');
         }
 
