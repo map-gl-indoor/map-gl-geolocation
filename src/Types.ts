@@ -14,7 +14,7 @@ export type Bounds = [number, number, number, number];
 export type Position = LngLat & {
     accuracy?: number,
     timestamp?: number,
-    level?: number
+    level?: number | null
 }
 
 // in degrees
@@ -23,6 +23,8 @@ export type Heading = number;
 export type EnhancedMapboxMap = (MapboxMap | IndoorMapboxMap) & {
     geolocation: GeolocationLayer
 };
+
+export type { IndoorMapboxMap };
 
 export type GeolocationLayerOptions = {
     trackUserLocation: {

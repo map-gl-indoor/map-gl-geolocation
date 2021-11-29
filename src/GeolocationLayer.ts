@@ -2,7 +2,7 @@
 import { createMarker } from './utils/MapGLUtils';
 import { boundsOfPositionWithAccuracy } from './utils/GeoUtils';
 import { EARTH_CIRCUMFERENCE } from './utils/GeoConstants';
-import type { Heading, Position, EnhancedMapboxMap, GeolocationLayerOptions } from './Types';
+import type { Heading, Position, EnhancedMapboxMap, IndoorMapboxMap, GeolocationLayerOptions } from './Types';
 import type { Marker } from 'mapbox-gl';
 
 import './GeolocationLayer.css';
@@ -72,6 +72,10 @@ class GeolocationLayer {
         this.options = Object.assign({}, DefaultOptions, options);
 
 
+        /**
+         * Handle map interactions 
+         */
+
         map.on('zoom', () => {
             if (this.position) {
                 this.renderPositionAccuracy();
@@ -81,17 +85,23 @@ class GeolocationLayer {
         map.on('touchstart', () => (this.trackUserLocation = false));
         map.on('wheel', () => (this.trackUserLocation = false));
 
-        // if (map.indoor) {
-        //     map.on('indoor.control.clicked', () => {
-        //         this._trackUserLocation = false;
-        //     });
-        //     map.on('indoor.level.changed', () => {
-        //         this.updatePosition(this.position, true);
-        //     });
-        //     map.on('indoor.map.loaded', () => {
-        //         this.updatePosition(this.position, true);
-        //     });
-        // }
+        if ((this.map as IndoorMapboxMap).indoor !== undefined) {
+            map.on('indoor.control.clicked', () => {
+                this._trackUserLocation = false;
+            });
+            map.on('indoor.level.changed', () => {
+                this.renderPosition();
+                if (this.position && this._trackUserLocation) {
+                    this.centerOnCamera();
+                }
+            });
+            map.on('indoor.map.loaded', () => {
+                this.renderPosition();
+                if (this.position && this._trackUserLocation) {
+                    this.centerOnCamera();
+                }
+            });
+        }
 
         /**
          * Create DOM elements
@@ -195,11 +205,11 @@ class GeolocationLayer {
 
         let showPosition: boolean = position !== null;
 
-        // if (showPosition && this.map.indoor) {
-        //     showPosition = this.map.indoor.getLevel() === null
-        //         || position.level === null
-        //         || this.map.indoor.getLevel() === position.level.val;
-        // }
+        if (showPosition && (this.map as IndoorMapboxMap).indoor !== undefined) {
+            const indoorLayer = (this.map as IndoorMapboxMap).indoor;
+            showPosition = indoorLayer.getLevel() === null
+                || indoorLayer.getLevel() === position!.level;
+        }
 
         if (showPosition && !this.positionRendered) {
             this.mapMarker = createMarker({
@@ -324,18 +334,15 @@ class GeolocationLayer {
 
         this.map.jumpTo(transform);
 
-        // if (this.map.indoor
-        //     && this.map.indoor.getSelectedMap() !== null
-        //     && this.position
-        //     && this.position.level
-        //     && !this.position.level.isRange
-        //     && this.position.level.val !== this.map.indoor.getLevel()
-        // ) {
+        if ((this.map as IndoorMapboxMap).indoor !== undefined) {
+            const indoorLayer = (this.map as IndoorMapboxMap).indoor;
 
-        //     this.map.indoor.setLevel(this.position.level.val);
-
-        // }
-
+            if (indoorLayer.getSelectedMap() !== null
+                && typeof this.position.level !== 'undefined'
+                && this.position.level !== indoorLayer.getLevel()) {
+                indoorLayer.setLevel(this.position.level);
+            }
+        }
     }
 
 }
