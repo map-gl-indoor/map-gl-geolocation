@@ -2,8 +2,9 @@
 import { createMarker } from './utils/MapGLUtils';
 import { boundsOfPositionWithAccuracy } from './utils/GeoUtils';
 import { EARTH_CIRCUMFERENCE } from './utils/GeoConstants';
-import type { Heading, Position, EnhancedMapboxMap, IndoorMapboxMap, GeolocationLayerOptions } from './Types';
+import type { Heading, Position, MapboxMapWithGeoloc, GeolocationLayerOptions } from './Types';
 import type { Marker } from 'mapbox-gl';
+import { MapboxMapWithIndoor } from 'map-gl-indoor';
 
 import './GeolocationLayer.css';
 
@@ -26,7 +27,7 @@ class GeolocationLayer {
     /**
      * Map
      */
-    private map: EnhancedMapboxMap;
+    private map: MapboxMapWithGeoloc;
     private options: GeolocationLayerOptions;
 
     /**
@@ -60,7 +61,7 @@ class GeolocationLayer {
     // private isPositionOld: boolean = false;
 
 
-    constructor(map: EnhancedMapboxMap, options: GeolocationLayerOptions = DefaultOptions) {
+    constructor(map: MapboxMapWithGeoloc, options: GeolocationLayerOptions = DefaultOptions) {
 
         /**
          * Check parameters
@@ -85,7 +86,7 @@ class GeolocationLayer {
         map.on('touchstart', () => (this.trackUserLocation = false));
         map.on('wheel', () => (this.trackUserLocation = false));
 
-        if ((this.map as IndoorMapboxMap).indoor !== undefined) {
+        if ((this.map as MapboxMapWithIndoor).indoor !== undefined) {
             map.on('indoor.control.clicked', () => {
                 this._trackUserLocation = false;
             });
@@ -205,8 +206,8 @@ class GeolocationLayer {
 
         let showPosition: boolean = position !== null;
 
-        if (showPosition && (this.map as IndoorMapboxMap).indoor !== undefined) {
-            const indoorLayer = (this.map as IndoorMapboxMap).indoor;
+        if (showPosition && (this.map as MapboxMapWithIndoor).indoor !== undefined) {
+            const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
             showPosition = indoorLayer.getLevel() === null
                 || indoorLayer.getLevel() === position!.level;
         }
@@ -334,8 +335,8 @@ class GeolocationLayer {
 
         this.map.jumpTo(transform);
 
-        if ((this.map as IndoorMapboxMap).indoor !== undefined) {
-            const indoorLayer = (this.map as IndoorMapboxMap).indoor;
+        if ((this.map as MapboxMapWithIndoor).indoor !== undefined) {
+            const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
 
             if (indoorLayer.getSelectedMap() !== null
                 && typeof this.position.level !== 'undefined'

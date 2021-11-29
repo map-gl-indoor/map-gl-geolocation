@@ -1,9 +1,9 @@
 import { Map as MapboxMap } from 'mapbox-gl';
-import { addIndoorTo, IndoorMap } from 'map-gl-indoor';
+import { addIndoorTo, IndoorControl, IndoorMap } from 'map-gl-indoor';
 import { addGeolocationTo, GeolocationControl } from '../src/index';
 
-import type { EnhancedMapboxMap as MapboxMapWithIndoor } from 'map-gl-indoor';
-import type { EnhancedMapboxMap as MapboxMapWithGeoloc } from '../src/index';
+import type { MapboxMapWithIndoor } from 'map-gl-indoor';
+import type { MapboxMapWithGeoloc } from '../src/index';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './style.css';
@@ -23,7 +23,7 @@ const map = new MapboxMap({
 addIndoorTo(map);
 addGeolocationTo(map);
 
-map.addControl(map.indoor.control);
+map.addControl(new IndoorControl());
 map.addControl(new GeolocationControl());
 
 // Retrieve the geojson from the path and add the map

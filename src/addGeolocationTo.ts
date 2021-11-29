@@ -1,9 +1,9 @@
 import GeolocationLayer from './GeolocationLayer';
 
-import type { EnhancedMapboxMap } from './Types';
+import type { MapboxMapWithGeoloc } from './Types';
 import type { Map as MapboxMap } from 'mapbox-gl';
 
-export default function addGeolocationTo(map: MapboxMap): EnhancedMapboxMap {
+export default function addGeolocationTo(map: MapboxMap): MapboxMapWithGeoloc {
     Object.defineProperty(
         map,
         'geolocation',
@@ -16,5 +16,5 @@ export default function addGeolocationTo(map: MapboxMap): EnhancedMapboxMap {
             }
         });
 
-    return map as EnhancedMapboxMap;
+    return map as MapboxMapWithGeoloc;
 }
