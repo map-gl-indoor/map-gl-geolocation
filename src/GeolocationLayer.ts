@@ -208,6 +208,7 @@ class GeolocationLayer {
         if (showPosition && typeof (this.map as MapboxMapWithIndoor).indoor !== 'undefined') {
             const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
             showPosition = indoorLayer.getLevel() === null
+                || typeof position.level !== 'number'
                 || indoorLayer.getLevel() === position.level;
         }
 
@@ -338,7 +339,7 @@ class GeolocationLayer {
             const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
 
             if (indoorLayer.getSelectedMap() !== null
-                && typeof this.position.level !== 'undefined'
+                && typeof this.position.level === 'number'
                 && this.position.level !== indoorLayer.getLevel()) {
                 indoorLayer.setLevel(this.position.level);
             }
