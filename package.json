@@ -1,7 +1,7 @@
 {
   "name": "map-gl-geolocation",
   "description": "A MapGL plugin to visualize a custom user geolocation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "Thibaud Michel",
   "license": "MIT",
   "main": "dist/map-gl-geolocation.umd.js",
