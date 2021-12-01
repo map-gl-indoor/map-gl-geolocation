@@ -41,7 +41,7 @@
     "vite-plugin-dts": "^0.9.6"
   },
   "dependencies": {
-    "map-gl-indoor": "^0.4.0",
+    "map-gl-indoor": "^0.4.2",
     "mapbox-gl": "^1.13.2"
   },
   "exports": {
