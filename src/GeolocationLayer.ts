@@ -86,7 +86,7 @@ class GeolocationLayer {
         map.on('touchstart', () => (this.trackUserLocation = false));
         map.on('wheel', () => (this.trackUserLocation = false));
 
-        if ((this.map as MapboxMapWithIndoor).indoor !== undefined) {
+        if (typeof (this.map as MapboxMapWithIndoor).indoor !== 'undefined') {
             map.on('indoor.control.clicked', () => {
                 this._trackUserLocation = false;
             });
@@ -176,8 +176,6 @@ class GeolocationLayer {
 
     private renderPosition() {
 
-        const position = this.position;
-
         /*
          * Temporarly removed 'old position' behavior because this approach does not work with
          * positions injected
@@ -203,27 +201,28 @@ class GeolocationLayer {
         //     }
         // }
 
+        let showPosition: boolean = this.position !== null;
 
-        let showPosition: boolean = position !== null;
+        const position = this.position!;
 
-        if (showPosition && (this.map as MapboxMapWithIndoor).indoor !== undefined) {
+        if (showPosition && typeof (this.map as MapboxMapWithIndoor).indoor !== 'undefined') {
             const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
             showPosition = indoorLayer.getLevel() === null
-                || indoorLayer.getLevel() === position!.level;
+                || indoorLayer.getLevel() === position.level;
         }
 
         if (showPosition && !this.positionRendered) {
             this.mapMarker = createMarker({
                 dom: this.positionIcon,
                 iconAnchor: [0, 0],
-                latitude: position!.lat,
-                longitude: position!.lng
+                latitude: position.lat,
+                longitude: position.lng
             }).addTo(this.map);
 
         } else if (!showPosition) {
             this.mapMarker?.remove();
         } else if (showPosition) {
-            this.mapMarker?.setLngLat([position!.lng, position!.lat]);
+            this.mapMarker?.setLngLat([position.lng, position.lat]);
         }
 
         this.positionRendered = showPosition;
@@ -335,7 +334,7 @@ class GeolocationLayer {
 
         this.map.jumpTo(transform);
 
-        if ((this.map as MapboxMapWithIndoor).indoor !== undefined) {
+        if (typeof (this.map as MapboxMapWithIndoor).indoor !== 'undefined') {
             const indoorLayer = (this.map as MapboxMapWithIndoor).indoor;
 
             if (indoorLayer.getSelectedMap() !== null
