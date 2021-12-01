@@ -7,6 +7,7 @@
   "main": "dist/map-gl-geolocation.umd.js",
   "module": "dist/map-gl-geolocation.es.js",
   "types": "dist/src/index.d.ts",
+  "style": "dist/map-gl-geolocation.css",
   "files": [
     "dist"
   ],
@@ -48,6 +49,7 @@
     ".": {
       "import": "./dist/map-gl-geolocation.es.js",
       "require": "./dist/map-gl-geolocation.umd.js"
-    }
+    },
+    "./dist/map-gl-geolocation.css": "./dist/map-gl-geolocation.css"
   }
 }
