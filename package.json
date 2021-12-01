@@ -27,7 +27,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "mapbox-gl": ">1.10.0"
