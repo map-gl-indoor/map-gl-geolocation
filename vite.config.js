@@ -15,6 +15,11 @@ export default defineConfig({
             output: {
                 globals: {
                     'mapbox-gl': 'mapboxgl'
+                },
+                assetFileNames: (assetInfo) => {
+                    if (assetInfo.name == 'style.css')
+                        return 'map-gl-geolocation.css';
+                    return assetInfo.name;
                 }
             }
         }
