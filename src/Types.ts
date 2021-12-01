@@ -27,8 +27,9 @@ export type MapboxMapWithGeoloc = (MapboxMap | MapboxMapWithIndoor) & {
 export type GeolocationLayerOptions = {
     trackUserLocation: {
         autoZoom: boolean,
-        autoZoomPadding: number
-    }
+        autoZoomPaddingPercentage: number,
+        autoZoomDefaultAccuracy: number
+    },
     maxZoom: number,
     minimumAccuracyCircleRadius: number // in pixels
 };

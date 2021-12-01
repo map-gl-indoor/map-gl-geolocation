@@ -1,4 +1,8 @@
 import { Marker } from 'mapbox-gl';
+import { EARTH_CIRCUMFERENCE } from './GeoConstants';
+
+import type { LngLat } from '../Types';
+import type { Map } from 'mapbox-gl';
 
 
 // https://stackoverflow.com/a/39006388/2239938
@@ -54,3 +58,14 @@ export function createMarker(options: MarkerOptions) {
     return marker;
 }
 
+export function approximateLengthOfAPixel(map: Map, point?: LngLat) {
+    // https://wiki.openstreetmap.org/wiki/Zoom_levels
+
+    if (!point) {
+        point = map.getCenter();
+    }
+
+    const lengthOfATileInMeters = EARTH_CIRCUMFERENCE * Math.cos(point.lat / 180 * Math.PI) / (2 ** map.getZoom());
+    const tileSizeInPx = (map as any).transform.tileSize;
+    return lengthOfATileInMeters / tileSizeInPx;
+}

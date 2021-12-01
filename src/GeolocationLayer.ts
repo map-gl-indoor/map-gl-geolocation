@@ -1,10 +1,10 @@
 
-import { createMarker } from './utils/MapGLUtils';
+import { approximateLengthOfAPixel, createMarker } from './utils/MapGLUtils';
 import { boundsOfPositionWithAccuracy } from './utils/GeoUtils';
-import { EARTH_CIRCUMFERENCE } from './utils/GeoConstants';
+
 import type { Heading, Position, MapboxMapWithGeoloc, GeolocationLayerOptions } from './Types';
 import type { Marker } from 'mapbox-gl';
-import { MapboxMapWithIndoor } from 'map-gl-indoor';
+import type { MapboxMapWithIndoor } from 'map-gl-indoor';
 
 import './GeolocationLayer.css';
 
@@ -16,7 +16,8 @@ import './GeolocationLayer.css';
 const DefaultOptions: GeolocationLayerOptions = {
     trackUserLocation: {
         autoZoom: true,
-        autoZoomPadding: 100,
+        autoZoomPaddingPercentage: 75,
+        autoZoomDefaultAccuracy: 50
     },
     maxZoom: 21,
     minimumAccuracyCircleRadius: 18
@@ -237,11 +238,8 @@ class GeolocationLayer {
         let showAccuracy = position !== null && typeof position.accuracy === 'number';
 
         if (showAccuracy && position!.accuracy) {
-            // https://wiki.openstreetmap.org/wiki/Zoom_levels
-            const untypedMap: any = this.map; // For TSC
-            const lengthOfATileInMeters = EARTH_CIRCUMFERENCE * Math.cos(position!.lat / 180 * Math.PI) / (2 ** this.map.getZoom());
-            const lengthOfAPixel = lengthOfATileInMeters / untypedMap.transform.tileSize;
-            const radiusInPx = position!.accuracy / lengthOfAPixel;
+
+            const radiusInPx = position!.accuracy / approximateLengthOfAPixel(this.map, this.position!);
 
             if (radiusInPx < this.options.minimumAccuracyCircleRadius) {
                 // accuracy is to small to be rendered
@@ -301,7 +299,7 @@ class GeolocationLayer {
         return this._trackUserLocation;
     }
 
-    private centerOnCamera(adaptToScreenSize = false) {
+    private centerOnCamera() {
 
         if (!this.position || this.map.isMoving()) {
             return;
@@ -310,22 +308,45 @@ class GeolocationLayer {
         const { trackUserLocation: trackUserLocationOptions } = this.options;
 
         let transform;
-        if (adaptToScreenSize) {
 
-            let paddingToTest = trackUserLocationOptions.autoZoomPadding;
+        if (trackUserLocationOptions.autoZoom) {
 
-            while (!transform && paddingToTest > 0) {
+            // First, calculate if autoZoom is necessary
 
-                transform = this.map.cameraForBounds(
-                    boundsOfPositionWithAccuracy(this.position),
-                    {
-                        bearing: this.map.getBearing(),
-                        maxZoom: this.options.maxZoom,
-                        padding: paddingToTest
-                    }
-                );
+            const accuracyToConsider = typeof this.position.accuracy === 'number'
+                ? this.position.accuracy
+                : trackUserLocationOptions.autoZoomDefaultAccuracy;
 
-                paddingToTest /= 2;
+            const canvasWidth = this.map.getCanvas().width / window.devicePixelRatio;
+            const approximateHorizontalCanvasDistance =
+                canvasWidth * approximateLengthOfAPixel(this.map, this.position);
+
+            if (approximateHorizontalCanvasDistance > accuracyToConsider * 16
+                || approximateHorizontalCanvasDistance < accuracyToConsider * 2) {
+
+
+                // Secondly, calculate the padding to apply
+
+                let paddingToTest = Math.min(
+                    canvasWidth,
+                    this.map.getCanvas().height / window.devicePixelRatio
+                ) * 0.5 * trackUserLocationOptions.autoZoomPaddingPercentage / 100;
+               
+                do {
+
+                    transform = this.map.cameraForBounds(
+                        boundsOfPositionWithAccuracy(this.position, accuracyToConsider),
+                        {
+                            bearing: this.map.getBearing(),
+                            maxZoom: this.options.maxZoom,
+                            padding: paddingToTest
+                        }
+                    );
+
+                    paddingToTest /= 2;
+
+                } while (!transform && paddingToTest > 1);
+
             }
         }
 

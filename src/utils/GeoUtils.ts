@@ -14,6 +14,9 @@ export function boundsFromLngLatAndRadius(lngLat: LngLat, radius: number = 0): B
     ];
 }
 
-export function boundsOfPositionWithAccuracy(position: Position): Bounds {
-    return boundsFromLngLatAndRadius(position, position.accuracy);
+export function boundsOfPositionWithAccuracy(position: Position, defaultAccuracy: number = 0): Bounds {
+    return boundsFromLngLatAndRadius(
+        position,
+        position.accuracy ? position.accuracy : defaultAccuracy
+    );
 }
