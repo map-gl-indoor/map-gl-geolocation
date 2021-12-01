@@ -7,7 +7,7 @@ export default defineConfig({
     build: {
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
-            name: 'MapGLGeolocation',
+            name: 'mapgl_geolocation',
             fileName: (format) => `map-gl-geolocation.${format}.js`
         },
         rollupOptions: {
