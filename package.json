@@ -44,8 +44,8 @@
     "vite": "^2.6.4"
   },
   "dependencies": {
-    "map-gl-indoor": "^0.4.2",
-    "mapbox-gl": ">1.10.0"
+    "map-gl-indoor": "^0.4.3",
+    "mapbox-gl": "^1.10.0"
   },
   "exports": {
     ".": {
